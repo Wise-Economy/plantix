@@ -7,7 +7,8 @@ from dataclasses import dataclass
 
 @dataclass
 class PlantExpert(object):
-    """Represents a plantix community expert.
+    """
+    Represents a plantix community expert.
     
     Each expert has a unique id, a list of plants
     they can give advice on and a list of other
@@ -19,7 +20,8 @@ class PlantExpert(object):
 
 
 class PlantixApiClient(object):
-    """SDK for our Plantix Community API.
+    """
+    SDK for our Plantix Community API.
     """
 
     COMMUNITY_SERVICE = json.load(open(
@@ -31,7 +33,8 @@ class PlantixApiClient(object):
             self.COMMUNITY_SERVICE = json.load(open(file_path))
 
     def fetch(self, uid: String) -> PlantExpert:
-        """Fetch a plant expert by uid.
+        """
+        Fetch a plant expert by uid.
         
         @param uid: ID of the expert to fetch
         @raise KeyError: if no such uid exists
@@ -51,21 +54,14 @@ class PlantixApiClient(object):
         :return: Tuple with 'n' most covered plants in the network.
         """
 
-        reachable_experts_from_start = self.fetch(start).following
-        plant_topic_count_dict = {}
-        for expert_id in reachable_experts_from_start:
-            expert = self.fetch(expert_id)
-            expert_neighbors = expert.following
+        reachable_experts = set()
+        self.dfs(reachable_nodes=reachable_experts, start=start,)
+        reachable_experts.remove(start)
 
-            # Update the plant_topic counter
-            _update_plant_topic_count_dict(expert, plant_topic_count_dict)
-
-            # Append experts to reachable experts if not present.
-            for expert_neighbor in expert_neighbors:
-                if expert_neighbor not in reachable_experts_from_start:
-                    reachable_experts_from_start.append(expert_neighbor)
-
-        # get the top n available plant topics from the dict
+        plant_topic_count_dict = self.generate_plant_topic_count_dict(
+            experts=reachable_experts,
+        )
+        print(plant_topic_count_dict)
         top_n_plant_topics = sorted(
             plant_topic_count_dict,
             key=plant_topic_count_dict.get,
@@ -73,13 +69,43 @@ class PlantixApiClient(object):
         )[:n]
         return tuple(top_n_plant_topics)
 
+    def dfs(self, reachable_nodes: set, start: String) -> set:
+        """
+        Run the depth first search algorithm to identify all
+        the reachable nodes in a graph from the given start "expert" node.
 
-def _update_plant_topic_count_dict(expert, plant_topic_count_dict):
-    for plant_topic in expert.plants:
-        if plant_topic in plant_topic_count_dict:
-            plant_topic_count_dict[plant_topic] += 1
-        else:
-            plant_topic_count_dict[plant_topic] = 1
+        :param reachable_nodes: Set of all nodes reachable from the start
+                Initial value will be set() -> empty set.
+        :param start: uid of the expert "Node" from which the depth first search starts.
+        :return: Set of nodes that are reachable from start node.
+        """
+        if start not in reachable_nodes:
+            expert = self.fetch(start)
+            reachable_nodes.add(start)
+            for neighbour in expert.following:
+                self.dfs(reachable_nodes, neighbour)
+
+        return reachable_nodes
+
+    def generate_plant_topic_count_dict(self, experts: set) -> dict:
+        """
+        This function returns dict with plant topics covered and the number of experts
+        per topic among the given set of experts.
+
+        :param experts: Set of experts.
+        :return: Dict containing plant topics(as key) covered among the experts and
+                 their popularity count(as value which is the number of experts
+                 available per topic)
+        """
+        plant_topic_count_dict = {}
+        for expert_id in experts:
+            expert = self.fetch(uid=expert_id)
+            for plant_topic in expert.plants:
+                if plant_topic in plant_topic_count_dict:
+                    plant_topic_count_dict[plant_topic] += 1
+                else:
+                    plant_topic_count_dict[plant_topic] = 1
+        return plant_topic_count_dict
 
 
 if __name__ == '__main__':

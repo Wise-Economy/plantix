@@ -16,11 +16,15 @@ class PlantixApiClientIntegrationTest(unittest.TestCase):
             as the expert "3" is not followed by anyone
         """
         self._initiate_plantix_api_client()
+
         result = self.plantix_api_client.find_topics(start="0", n=2)
-        assert result == ('apple', 'pear')
+        assert result == ('pear', 'apple')
+
         result = self.plantix_api_client.find_topics(start="1", n=2)
-        assert result == ('apple', 'pear')
+        assert result == ('pear', 'apple')
+
         result = self.plantix_api_client.find_topics(start="2", n=2)
-        assert result == ('apple', 'pear')
+        assert set(result) == set(['pear', 'apple'])
+
         result = self.plantix_api_client.find_topics(start="3", n=2)
-        assert result == ('apple', 'pear')
+        assert result == ('pear', 'apple')
