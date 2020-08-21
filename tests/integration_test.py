@@ -1,6 +1,6 @@
 from plantix import PlantixApiClient, PlantExpert
 import os
-import json
+from tests.plantix_test_helper import PlantixApiClientForTesting
 import unittest
 
 
@@ -8,7 +8,7 @@ class PlantixApiClientIntegrationTest(unittest.TestCase):
 
     def _initiate_plantix_api_client(self):
         self.file_path = os.path.join(os.path.dirname(__file__), "community.json")
-        self.plantix_api_client = PlantixApiClient(file_path=self.file_path)
+        self.plantix_api_client = PlantixApiClientForTesting(file_path=self.file_path)
 
     def test_find_topics(self):
         """

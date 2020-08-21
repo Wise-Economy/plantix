@@ -1,14 +1,15 @@
 import unittest
-from plantix import PlantixApiClient, PlantExpert
+from plantix import PlantExpert
 import json
 import os
+from tests.plantix_test_helper import PlantixApiClientForTesting
 
 
 class PlantixApiClientUnitTest(unittest.TestCase):
 
     def _initiate_plantix_api_client(self):
         self.file_path = os.path.join(os.path.dirname(__file__), "community.json")
-        self.plantix_api_client = PlantixApiClient(file_path=self.file_path)
+        self.plantix_api_client = PlantixApiClientForTesting(file_path=self.file_path)
 
     def test_json_load(self):
         self._initiate_plantix_api_client()
@@ -32,23 +33,23 @@ class PlantixApiClientUnitTest(unittest.TestCase):
 
         # Node "3" is not reachable
         for i in ["0", "1", "2"]:
-            reachable_nodes = self.plantix_api_client.dfs(reachable_nodes, "1")
+            reachable_nodes = self.plantix_api_client._dfs(reachable_nodes, i)
             assert reachable_nodes == set(["0", "1", "2"])
             assert "3" not in reachable_nodes
 
         # All nodes are reachable from "3"
         reachable_nodes = set()
-        reachable_nodes = self.plantix_api_client.dfs(reachable_nodes, "3")
+        reachable_nodes = self.plantix_api_client._dfs(reachable_nodes, "3")
         print(reachable_nodes)
         assert reachable_nodes == set(["0", "1", "2", "3"])
 
     def test_generate_plant_topic_count_dict(self):
         self._initiate_plantix_api_client()
-        plant_topic_count_dict = self.plantix_api_client.generate_plant_topic_count_dict(
+        plant_topic_count_dict = self.plantix_api_client._generate_plant_topic_count_dict(
             experts=set(["3"]),
         )
         assert plant_topic_count_dict == {"asparagus": 1, "beetroot": 1}
-        plant_topic_count_dict = self.plantix_api_client.generate_plant_topic_count_dict(
+        plant_topic_count_dict = self.plantix_api_client._generate_plant_topic_count_dict(
             experts=set(["2", "1"]),
         )
         assert plant_topic_count_dict == {"pear": 2, "apple": 1}
