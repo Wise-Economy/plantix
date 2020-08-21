@@ -44,14 +44,10 @@ def depth_first_search_iterative(network: Dict[str, PlantExpert], start: String)
     reachable_nodes = set()
     list_.append(start)
     while list_:
-        try:
-            current_expert_node = list_.pop()
-            if current_expert_node not in reachable_nodes:
-                reachable_nodes.add(current_expert_node)
-                expert = network.get(current_expert_node)
-                for following_expert_node in expert.following:
-                    list_.append(following_expert_node)
-        except TypeError:
-            x = 1
-            y = 2
+        current_expert_node = list_.pop()
+        if current_expert_node not in reachable_nodes:
+            reachable_nodes.add(current_expert_node)
+            expert = network.get(current_expert_node)
+            for following_expert_node in expert.following:
+                list_.append(following_expert_node)
     return reachable_nodes

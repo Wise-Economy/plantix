@@ -49,9 +49,8 @@ class PlantixApiClientUnitTest(unittest.TestCase):
         reachable_nodes = set()
         reachable_nodes = depth_first_search_iterative(
             network=self.plantix_api_client.NETWORK,
-            start=expert,
+            start="3",
         )
-        print(reachable_nodes)
         assert reachable_nodes == set(["0", "1", "2", "3"])
 
     def test_generate_plant_topic_count_dict(self):

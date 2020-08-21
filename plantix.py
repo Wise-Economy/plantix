@@ -65,4 +65,4 @@ class PlantixApiClient(object):
 
 
 if __name__ == '__main__':
-    print(PlantixApiClient().find_topics(start="6", n=3))
+    print(PlantixApiClient().find_topics(start="0", n=3))
