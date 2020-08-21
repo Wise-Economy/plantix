@@ -65,4 +65,6 @@ class PlantixApiClient(object):
 
 
 if __name__ == '__main__':
-    print(PlantixApiClient().find_topics(start="0", n=3))
+    PlantixApiClient().find_topics(start='8', n=3)
+    # for i in range(10):
+    #     PlantixApiClient().find_topics(start=str(i), n=3)

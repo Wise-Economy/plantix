@@ -33,7 +33,6 @@ class PlantixApiClientUnitTest(unittest.TestCase):
 
     def test_depth_first_search_iterative(self):
         self._initiate_plantix_api_client()
-        reachable_nodes = set()
 
         # Node "3" is not reachable
         for expert in ["0", "1", "2"]:
@@ -45,8 +44,6 @@ class PlantixApiClientUnitTest(unittest.TestCase):
             assert "3" not in reachable_nodes
 
         # All nodes are reachable from "3"
-        expert = self.plantix_api_client.NETWORK.get("3")
-        reachable_nodes = set()
         reachable_nodes = depth_first_search_iterative(
             network=self.plantix_api_client.NETWORK,
             start="3",

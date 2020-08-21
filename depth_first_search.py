@@ -40,14 +40,14 @@ def depth_first_search_iterative(network: Dict[str, PlantExpert], start: String)
     :return: Set of nodes that are reachable from start node.
     """
 
-    list_ = []
+    stack = [start]
     reachable_nodes = set()
-    list_.append(start)
-    while list_:
-        current_expert_node = list_.pop()
+    while stack:
+        current_expert_node = stack.pop()
         if current_expert_node not in reachable_nodes:
             reachable_nodes.add(current_expert_node)
             expert = network.get(current_expert_node)
             for following_expert_node in expert.following:
-                list_.append(following_expert_node)
+                # stack.extend((expert.following) - reachable_nodes)
+                stack.append(following_expert_node)
     return reachable_nodes

@@ -23,4 +23,6 @@ def generate_plant_experts_count_dict(network: Dict[str, PlantExpert], experts: 
                 plant_topic_count_dict[plant_topic] += 1
             else:
                 plant_topic_count_dict[plant_topic] = 1
+
+    print(plant_topic_count_dict)
     return plant_topic_count_dict
