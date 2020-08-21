@@ -1,4 +1,5 @@
-from plantix import PlantixApiClient, PlantExpert
+from plantix import PlantixApiClient
+from plant_expert import PlantExpert
 import os
 from tests.plantix_test_helper import PlantixApiClientForTesting
 import unittest
