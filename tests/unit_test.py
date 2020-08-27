@@ -4,7 +4,7 @@ import os
 
 from plant_expert import PlantExpert
 from tests.plantix_test_helper import PlantixApiClientForTesting
-from helper import generate_plant_experts_count_dict
+from helper import generate_plant_experts_topic_count_dict
 from depth_first_search import depth_first_search_iterative
 
 
@@ -52,12 +52,12 @@ class PlantixApiClientUnitTest(unittest.TestCase):
 
     def test_generate_plant_topic_count_dict(self):
         self._initiate_plantix_api_client()
-        plant_topic_count_dict = generate_plant_experts_count_dict(
+        plant_topic_count_dict = generate_plant_experts_topic_count_dict(
             network=self.plantix_api_client.NETWORK,
             experts=set(["3"]),
         )
         assert plant_topic_count_dict == {"asparagus": 1, "beetroot": 1}
-        plant_topic_count_dict = generate_plant_experts_count_dict(
+        plant_topic_count_dict = generate_plant_experts_topic_count_dict(
             network=self.plantix_api_client.NETWORK,
             experts=set(["2", "1"]),
         )

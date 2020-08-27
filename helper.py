@@ -1,9 +1,7 @@
-from typing import Dict
-
-from plant_expert import PlantExpert
+from PlantixCommunityService import PlantixCommunityService
 
 
-def generate_plant_experts_count_dict(network: Dict[str, PlantExpert], experts: set) -> dict:
+def generate_plant_experts_topic_count_dict(experts: set) -> dict:
     """
     This function returns dict with plant topics covered and the number of experts
     per topic among the given set of experts.
@@ -15,6 +13,7 @@ def generate_plant_experts_count_dict(network: Dict[str, PlantExpert], experts: 
              their popularity count(as value which is the number of experts
              available per topic)
     """
+    network = PlantixCommunityService()
     plant_topic_count_dict = {}
     for expert_id in experts:
         expert = network.get(expert_id)
